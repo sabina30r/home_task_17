@@ -9,27 +9,24 @@ import java.util.List;
 
 public class TopicDaoImpl implements TopicDao {
 
-    private final SessionFactory sessionFactory;
+    private final Session session;
 
-    public TopicDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public TopicDaoImpl(Session session) {
+        this.session = session;
     }
 
     @Override
     public List<Topic> findAll() {
-        Session session = sessionFactory.openSession();
         return session.createQuery("from Topic ").list();
     }
 
     @Override
     public Topic findById(Long id) {
-        Session session = sessionFactory.openSession();
         return session.get(Topic.class, id);
     }
 
     @Override
     public void create(Topic topic) {
-        Session session = sessionFactory.openSession();
         session.persist(topic);
     }
 }

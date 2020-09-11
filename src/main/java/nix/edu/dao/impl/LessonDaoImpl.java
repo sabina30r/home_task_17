@@ -11,27 +11,25 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class LessonDaoImpl implements LessonDao {
-    private final SessionFactory sessionFactory;
+    private final Session session;
 
-    public LessonDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public LessonDaoImpl(Session session) {
+        this.session = session;
     }
 
     @Override
     public List<Lesson> findAll() {
-        Session session = sessionFactory.openSession();
         return session.createQuery("from Lesson ").list();
     }
 
     @Override
     public Lesson findById(Long id) {
-        Session session = sessionFactory.openSession();
         return session.get(Lesson.class, id);
     }
 
     @Override
     public Lesson findNextLesson(LocalDate date, Long groupId) {
-        Query query = sessionFactory.openSession().createQuery("from Lesson L " +
+        Query query = session.createQuery("from Lesson L " +
                 "where date = (select min(date) from Lesson ls" +
                 " where ls.group.id = :qGroupId and date > :date) AND L.group.id = :id");
         query.setParameter("date", date);

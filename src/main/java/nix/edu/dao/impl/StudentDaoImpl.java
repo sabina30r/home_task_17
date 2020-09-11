@@ -13,12 +13,12 @@ import java.util.List;
 
 public class StudentDaoImpl implements StudentDao {
 
-    private final SessionFactory sessionFactory;
+    private final Session session;
     private final LessonDao lessonDao;
     private final GroupDao groupDao;
 
-    public StudentDaoImpl(SessionFactory sessionFactory, LessonDao lessonDao, GroupDao groupDao) {
-        this.sessionFactory = sessionFactory;
+    public StudentDaoImpl(Session session, LessonDao lessonDao, GroupDao groupDao) {
+        this.session = session;
         this.lessonDao = lessonDao;
         this.groupDao = groupDao;
     }
@@ -26,19 +26,16 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public List<Student> findAll() {
-        Session session = sessionFactory.openSession();
         return session.createQuery("from Student ").list();
     }
 
     @Override
     public Student findById(Long id) {
-        Session session = sessionFactory.openSession();
         return session.get(Student.class, id);
     }
 
     @Override
     public void create(Student student) {
-        Session session = sessionFactory.openSession();
         session.persist(student);
     }
 
